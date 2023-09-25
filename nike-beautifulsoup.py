@@ -12,7 +12,6 @@ kindcolours = boysjordan.find_all('button', 'product-card__colorway-btn')
 fixprices = boysjordan.find_all('div', 'product-card__price')
 links = boysjordan.find_all('div', 'product-card__body')
 link_images = boysjordan.find_all('div', 'wall-image-loader')
-# print(link_images)
 
 
 for title, kindcolour, fixprice, link, link_image in zip(titles, kindcolours, fixprices, links, link_images):
