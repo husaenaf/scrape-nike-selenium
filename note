@@ -1,0 +1,5 @@
+scraping data in nike.com
+
+main.py contains scraping data with beautifulsoup, request and selenium... success all
+nike-beautifulsoup.py contains scraping data with request and beautifulsoup... failed in image src
+nike-scrapy.py contains scraping data with scrapy... failed in image src
