@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 import csv
 import openpyxl
+import mysql.connector
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from unidecode import unidecode
@@ -33,11 +34,17 @@ for i in range(25):
     driver.execute_script("window.scrollBy(0, 250)")
     time.sleep(1)
 # digunakan untuk melakukan scroll ke samping sebanyak 50 piksel dalam satu langkah
-driver.execute_script("window.scrollBy(50, 0)")
-time.sleep(1)
+# driver.execute_script("window.scrollBy(50, 0)")
+# time.sleep(1)
 
 soup = BeautifulSoup(driver.page_source, "html.parser")
 
+# saving data to mysql part 1
+cnx = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='nike')
+cursor = cnx.cursor()
+output_list = []
+
+# proses scraping
 for item in soup.find_all('div', 'product-card__body'):
     name = item.find('div', 'product-card__title').text
     # kindcolour = item.find('div', 'product-card__product-count').text
@@ -54,6 +61,21 @@ for item in soup.find_all('div', 'product-card__body'):
     link = item.find('a')['href']
     image = item.find('div', 'wall-image-loader').find('img')['src']
 
+    item_data = {
+        'name': name,
+        'kindcolour': kindcolour,
+        'price': price,
+        'link': link,
+        'image': image
+    }
+    output_list.append(item_data)
+
+    # saving data to mysql part 2
+    add_data = (
+        "INSERT INTO football (name, kindcolour, price, link, image) VALUES (%(name)s, %(kindcolour)s, %(price)s, %(link)s, %(image)s )")
+    cursor.execute(add_data, item_data)
+    cnx.commit()
+
 
     print(name)
     print(kindcolour)
@@ -63,7 +85,7 @@ for item in soup.find_all('div', 'product-card__body'):
     print("============")
 
     name = name.replace(':', '=').replace('/', '_')
-    # proses membuat gambar
+    # proses make image in gallery
     with open('gallery/' + name + '.jpg', 'wb') as f:
         img = requests.get(image)
         f.write(img.content)
