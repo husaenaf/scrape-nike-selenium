@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
-# scripe nike Men's Football shoes
+# scripe nike Men's Football shoes procedural
 url = 'https://www.nike.com/id/w/mens-football-shoes-1gdj0znik1zy7ok'
 
 driver = webdriver.Chrome()
